@@ -14,12 +14,13 @@ export class AuthService {
     @InjectRepository(User) private userRepo: Repository<User>,
     private jwtService: JwtService,
   ) {
+    console.log('FIREBASE_KEY present:', !!process.env.FIREBASE_PRIVATE_KEY, 'length:', (process.env.FIREBASE_PRIVATE_KEY || '').length);
     if (!getApps().length) {
       try {
         initializeApp({
           credential: cert({
             projectId: process.env.FIREBASE_PROJECT_ID || 'food-app-32114',
-            privateKey: (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+            privateKey: (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n').trim(),
             clientEmail: process.env.FIREBASE_CLIENT_EMAIL || 'firebase-adminsdk-fbsvc@food-app-32114.iam.gserviceaccount.com',
           }),
         });
