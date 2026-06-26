@@ -9,12 +9,23 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { BrandingModule } from './modules/branding/branding.module';
 import { StorageModule } from './modules/storage/storage.module';
 
+console.log('DB CONFIG:', {
+  host: process.env.PGHOST,
+  port: process.env.PGPORT,
+  user: process.env.PGUSER,
+  db: process.env.PGDATABASE,
+});
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: process.env.PGHOST, port: parseInt(process.env.PGPORT || "5432"), username: process.env.PGUSER, password: process.env.PGPASSWORD, database: process.env.PGDATABASE,
+      host: process.env.PGHOST || 'mainline.proxy.rlwy.net',
+      port: parseInt(process.env.PGPORT || '27281'),
+      username: process.env.PGUSER || 'postgres',
+      password: process.env.PGPASSWORD || 'keRMTcNtIiaIglDztprkGZyupZgvnooq',
+      database: process.env.PGDATABASE || 'railway',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       logging: false,
