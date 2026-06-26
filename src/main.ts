@@ -8,7 +8,7 @@ async function bootstrap() {
   app.setGlobalPrefix('v1');
 
   const port = process.env.PORT || 3000;
-  await app.listen(port);
+await app.listen(port, '0.0.0.0');
   console.log(`🔥 FlameEats API running on http://localhost:${port}/v1`);
 }
 bootstrap();
