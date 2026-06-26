@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -48,4 +48,27 @@ export class AuthService {
     if (!phone) throw new BadRequestException('Token has no phone number');
     let user = await this.userRepo.findOne({ where: { firebaseUid: decoded.uid } });
     if (!user) {
-      user = this.userRepo.create({ phone,
+      user = this.userRepo.create({ phone, firebaseUid: decoded.uid });
+      if (fcmToken) user.fcmToken = fcmToken;
+      await this.userRepo.save(user);
+    } else if (fcmToken && user.fcmToken !== fcmToken) {
+      user.fcmToken = fcmToken;
+      await this.userRepo.save(user);
+    }
+    const token = this.jwtService.sign({ sub: user.id, phone: user.phone });
+    return { token, user };
+  }
+
+  async findUser(id: string) {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+    return user;
+  }
+
+  async updateProfile(id: string, data: { name?: string; email?: string }) {
+    const user = await this.findUser(id);
+    if (data.name !== undefined) user.name = data.name;
+    if (data.email !== undefined) user.email = data.email;
+    return this.userRepo.save(user);
+  }
+}
