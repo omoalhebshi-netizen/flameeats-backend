@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth/auth.module';
 import { MenuModule } from './modules/menu/menu.module';
@@ -9,28 +9,24 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { BrandingModule } from './modules/branding/branding.module';
 import { StorageModule } from './modules/storage/storage.module';
 
-
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    TypeOrmModule.forRootAsync({
-  imports: [ConfigModule],
-  inject: [ConfigService],
-  useFactory: (config: ConfigService) => ({
-    type: 'postgres',
-    url: config.get('DATABASE_URL'),
-    entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    synchronize: true,
-    logging: false,
-    ssl: { rejectUnauthorized: false },
-  }),
-}),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      url: process.env.DATABASE_URL,
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+      logging: false,
+      ssl: { rejectUnauthorized: false },
+    }),
     AuthModule,
     MenuModule,
     OrdersModule,
     DriversModule,
     NotificationsModule,
     BrandingModule,
+    StorageModule,
   ],
 })
 export class AppModule {}
