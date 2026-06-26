@@ -14,7 +14,7 @@ import { StorageModule } from './modules/storage/storage.module';
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      url: process.env.DATABASE_URL,
+      host: process.env.PGHOST, port: parseInt(process.env.PGPORT || "5432"), username: process.env.PGUSER, password: process.env.PGPASSWORD, database: process.env.PGDATABASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
       logging: false,
