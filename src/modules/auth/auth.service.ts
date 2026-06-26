@@ -19,13 +19,17 @@ export class AuthService {
     @InjectRepository(User) private userRepo: Repository<User>,
   ) {
   if (!getApps().length) {
-  initializeApp({
-    credential: cert({
-      projectId: process.env.FIREBASE_PROJECT_ID || 'food-app-32114',
-      privateKey: (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL || 'firebase-adminsdk-fbsvc@food-app-32114.iam.gserviceaccount.com',
-    } as any),
-  });
+  try {
+    initializeApp({
+      credential: cert({
+        projectId: process.env.FIREBASE_PROJECT_ID || 'food-app-32114',
+        privateKey: (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL || 'firebase-adminsdk-fbsvc@food-app-32114.iam.gserviceaccount.com',
+      } as any),
+    });
+  } catch (e) {
+    console.warn('Firebase init failed:', e.message);
+  }
 }
 
 this.auth = getAuth();
