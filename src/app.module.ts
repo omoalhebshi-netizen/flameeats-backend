@@ -10,12 +10,6 @@ import { BrandingModule } from './modules/branding/branding.module';
 import { StorageModule } from './modules/storage/storage.module';
 import { HealthController } from './health.controller';
 
-console.log('DB CONFIG:', {
-  host: process.env.PGHOST,
-  port: process.env.PGPORT,
-  user: process.env.PGUSER,
-  db: process.env.PGDATABASE,
-});
 
 @Module({
   controllers: [HealthController],

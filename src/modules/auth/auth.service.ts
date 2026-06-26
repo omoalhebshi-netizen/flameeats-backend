@@ -14,8 +14,6 @@ export class AuthService {
     @InjectRepository(User) private userRepo: Repository<User>,
     private jwtService: JwtService,
   ) {
-    console.log('ALL ENV KEYS:', Object.keys(process.env).join(','));
-    console.log('FIREBASE_KEY present:', !!process.env.FIREBASE_PRIVATE_KEY, 'length:', (process.env.FIREBASE_PRIVATE_KEY || '').length);
     if (!getApps().length) {
       try {
         initializeApp({
