@@ -10,18 +10,16 @@ import { User } from './entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-  type: 'postgres',
-  host: process.env.PGHOST,
-  port: parseInt(process.env.PGPORT || '5432'),
-  username: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
-  entities: [__dirname + '/**/*.entity{.ts,.js}'],
-  synchronize: true,
-  logging: false,
-  ssl: { rejectUnauthorized: false },
-}),
+    TypeOrmModule.forFeature([User]),
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get('JWT_SECRET') || 'flameeats-super-secret-key-2024',
+        signOptions: { expiresIn: config.get('JWT_EXPIRY', '7d') },
+      }),
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
