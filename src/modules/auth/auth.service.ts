@@ -21,7 +21,7 @@ export class AuthService {
         initializeApp({
           credential: cert({
             projectId: process.env.FIREBASE_PROJECT_ID || 'food-app-32114',
-            privateKey: (process.env.FIREBASE_PRIVATE_KEY || '').replace(/\\n/g, '\n').trim(),
+            privateKey: Buffer.from(process.env.FIREBASE_PRIVATE_KEY || '', 'base64').toString('utf8'),
             clientEmail: process.env.FIREBASE_CLIENT_EMAIL || 'firebase-adminsdk-fbsvc@food-app-32114.iam.gserviceaccount.com',
           }),
         });
