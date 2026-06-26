@@ -8,6 +8,7 @@ import { DriversModule } from './modules/drivers/drivers.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { BrandingModule } from './modules/branding/branding.module';
 import { StorageModule } from './modules/storage/storage.module';
+import { HealthController } from './health.controller';
 
 console.log('DB CONFIG:', {
   host: process.env.PGHOST,
@@ -17,6 +18,7 @@ console.log('DB CONFIG:', {
 });
 
 @Module({
+  controllers: [HealthController],
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
